@@ -991,28 +991,8 @@ output_stack_usage (void)
     {
       expanded_location loc
 	= expand_location (DECL_SOURCE_LOCATION (current_function_decl));
-      /* We don't want to print the full qualified name because it can be long,
-	 so we strip the scope prefix, but we may need to deal with the suffix
-	 created by the compiler.  */
-      const char *suffix
-	= strchr (IDENTIFIER_POINTER (DECL_NAME (current_function_decl)), '.');
-      const char *name
-	= lang_hooks.decl_printable_name (current_function_decl, 2);
-      if (suffix)
-	{
-	  const char *dot = strchr (name, '.');
-	  while (dot && strcasecmp (dot, suffix) != 0)
-	    {
-	      name = dot + 1;
-	      dot = strchr (name, '.');
-	    }
-	}
-      else
-	{
-	  const char *dot = strrchr (name, '.');
-	  if (dot)
-	    name = dot + 1;
-	}
+
+      const char *name = IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (current_function_decl));
 
       fprintf (stack_usage_file,
 	       "%s:%d:%d:%s\t" HOST_WIDE_INT_PRINT_DEC"\t%s\n",
